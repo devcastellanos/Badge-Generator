@@ -14,7 +14,7 @@ const GafeteGeneratorPage = () => {
   const gafeteRef = useRef();
 
   useEffect(() => {
-    fetch('http://localhost:3010/api/personal')
+    fetch('http://localhost:3031/api/personal')
       .then(res => res.json())
       .then(data => setEmpleados(data))
       .catch(err => console.error("Error al cargar empleados", err));

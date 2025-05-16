@@ -16,7 +16,7 @@ app.get('/api/personal', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3010;
+const PORT = process.env.PORT || 3031;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
