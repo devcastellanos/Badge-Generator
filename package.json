@@ -18,14 +18,15 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "backend": "node backend/index.js",
-    "frontend": "PORT=3030 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+"scripts": {
+  "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+  "backend": "node backend/index.js",
+  "frontend": "PORT=3030 react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject",
+  "postinstall": "cd backend && pnpm install"
+},
   "eslintConfig": {
     "extends": [
       "react-app",

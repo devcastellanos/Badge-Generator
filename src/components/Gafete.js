@@ -135,7 +135,7 @@ const Gafete = ({ empleado, scale = 1, posX = 50, posY = 50 }) => {
         }}>
           <table align="center" role="presentation" style={{
             width: '205px',
-            height: '351px',
+            height: '355px',
             borderRadius: '10px',
             border: '1px solid #000000',
             borderSpacing: 0,
@@ -202,6 +202,7 @@ const Gafete = ({ empleado, scale = 1, posX = 50, posY = 50 }) => {
                                   <img src="/img/ico-telefono.png" width="100%" alt="Icono Teléfono" />
                                 </td>
                               </tr>
+                              <br></br>
                               <tr>
                                 <td align="center" style={{ padding: 0 }}>
                                   <img src="/img/ico-global.png" width="100%" alt="Icono Web" />
