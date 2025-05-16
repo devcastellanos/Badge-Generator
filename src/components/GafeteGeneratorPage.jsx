@@ -14,11 +14,14 @@ const GafeteGeneratorPage = () => {
   const gafeteRef = useRef();
 
   useEffect(() => {
-    fetch('http://localhost:3031/api/personal')
+    const apiUrl = process.env.REACT_APP_API_URL;
+  
+    fetch(`${apiUrl}/personal`)
       .then(res => res.json())
       .then(data => setEmpleados(data))
       .catch(err => console.error("Error al cargar empleados", err));
   }, []);
+  
 
   useEffect(() => {
     const encontrado = empleados.find(emp => emp.PERSONAL?.toString() === personalInput);
