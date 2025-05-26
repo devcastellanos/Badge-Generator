@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Gafete from './Gafete';
 import './GafeteGeneratorPage.css';
 import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const GafeteGeneratorPage = () => {
   const [empleados, setEmpleados] = useState([]);
@@ -86,6 +87,65 @@ const GafeteGeneratorPage = () => {
 
     gafeteRef.current.style.backgroundColor = originalBg;
   };
+
+  const handleDownloadPDF = async () => {
+    if (!gafeteRef.current) return;
+  
+    const originalBg = gafeteRef.current.style.backgroundColor;
+    gafeteRef.current.style.backgroundColor = '#ffffff';
+  
+    const scale = 3;
+    const canvas = await html2canvas(gafeteRef.current, {
+      scale,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: '#ffffff',
+      logging: false,
+      imageTimeout: 0
+    });
+  
+    const imgData = canvas.toDataURL('image/png');
+    const imgWidthPx = canvas.width;
+    const imgHeightPx = canvas.height;
+  
+    const pxToMm = (px: number) => px * 0.264583;
+    const imgWidthMM = pxToMm(imgWidthPx);
+    const imgHeightMM = pxToMm(imgHeightPx);
+  
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'letter',
+    });
+  
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+  
+    // Limitar el tamaño máximo del contenido (p. ej. 180mm de alto)
+    const maxHeightMM = 400;
+    const maxWidthMM = 220;
+  
+    // Escalar proporcionalmente sin exceder los límites
+    let finalWidth = imgWidthMM;
+    let finalHeight = imgHeightMM;
+  
+    const widthRatio = maxWidthMM / imgWidthMM;
+    const heightRatio = maxHeightMM / imgHeightMM;
+    const scaleRatio = Math.min(widthRatio, heightRatio, 1); // No escalar más grande, solo reducir
+  
+    finalWidth = imgWidthMM * scaleRatio;
+    finalHeight = imgHeightMM * scaleRatio;
+  
+    // Centramos en la hoja
+    const marginX = (pageWidth - finalWidth) / 2;
+    const marginY = (pageHeight - finalHeight) / 2;
+  
+    pdf.addImage(imgData, 'PNG', marginX, marginY, finalWidth, finalHeight);
+    pdf.save(`gafete_${empleadoSeleccionado?.numControl || 'empleado'}.pdf`);
+  
+    gafeteRef.current.style.backgroundColor = originalBg;
+  };
+  
 
   return (
     <div className="gafete-layout" style={{ fontFamily: 'Arial, sans-serif' }}>
@@ -181,18 +241,33 @@ const GafeteGeneratorPage = () => {
                 onChange={(e) => setImgPosY(parseInt(e.target.value))}
               />
 
-              <button onClick={handleDownloadJPEG} style={{
-                marginTop: '25px',
-                padding: '12px 24px',
-                backgroundColor: '#9A3324',
-                color: '#fff',
-                border: 'none',
-                fontSize: '16px',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}>
-                Descargar como JPEG
-              </button>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '25px' }}>
+                <button onClick={handleDownloadJPEG} style={{
+                  flex: 1,
+                  padding: '12px',
+                  backgroundColor: '#9A3324',
+                  color: '#fff',
+                  border: 'none',
+                  fontSize: '16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}>
+                  Descargar JPEG
+                </button>
+
+                <button onClick={handleDownloadPDF} style={{
+                  flex: 1,
+                  padding: '12px',
+                  backgroundColor: '#4A4A4A',
+                  color: '#fff',
+                  border: 'none',
+                  fontSize: '16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}>
+                  Descargar PDF
+                </button>
+              </div>
             </>
           )}
         </div>

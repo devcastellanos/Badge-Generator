@@ -50,6 +50,8 @@
   padding: 30px;
   overflow: auto;
   background-color: transparent;
+  transform: scale(1);
+  transform-origin: top left;
 }
 
 .gafete-doble {
